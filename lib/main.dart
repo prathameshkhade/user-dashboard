@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:userdashboard/features/users/presentation/screens/dashboard_screen.dart';
 
 void main() {
   runApp(const UserDashboardApp());
@@ -32,7 +33,7 @@ class UserDashboardApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
 
-
+      home: const DashboardScreen(),
     );
   }
 }

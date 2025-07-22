@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class UserFormField extends StatefulWidget {
   final TextEditingController controller;
@@ -49,6 +48,21 @@ class _UserFormFieldState extends State<UserFormField> {
         _ => TextInputType.text,
       },
       maxLength: widget.hint.toLowerCase().contains('phone') ? 10 : 40,
+      validator: (value) {
+        if(value!.isEmpty) return '${widget.hint} is required';
+        switch(widget.hint) {
+          case 'Email': {
+            if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
+              return 'Enter a valid email address';
+            }
+          }
+          case 'Phone': {
+            if(value.length < 10) return 'Phone number must be of 10 digits';
+          }
+          default: null;
+        }
+        return null;
+      },
     );
   }
 }

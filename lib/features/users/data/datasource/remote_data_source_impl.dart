@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:userdashboard/core/secrets/app_secrets.dart';
 import 'package:userdashboard/features/users/data/datasource/remote_data_source.dart';
@@ -29,8 +30,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
       }
 
       final List<dynamic> dynamicList = jsonResponse['results'];
+      debugPrint(dynamicList.first.toString());
       final List<UserModel> users = dynamicList
-          .map((user) => UserModel.fromJson(user))
+          .map((e) => UserModel.fromJson(e))
           .toList();
 
       return users;

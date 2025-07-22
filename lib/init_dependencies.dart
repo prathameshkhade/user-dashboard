@@ -24,8 +24,8 @@ void initUsers() {
   sl.registerFactory<UserRepository>(() => UserRepositoryImpl(sl()));
 
   // Use cases
-  sl.registerFactory<UseCase>(() => GetAllUsersUseCase(sl()));
+  sl.registerFactory(() => GetAllUsersUseCase(sl()));
   
   // bloc
-  sl.registerSingleton(() => UserBloc(getAllUsersUseCase: sl()));
+  sl.registerLazySingleton<UserBloc>(() => UserBloc(getAllUsersUseCase: sl()));
 }

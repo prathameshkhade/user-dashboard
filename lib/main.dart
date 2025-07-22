@@ -11,7 +11,7 @@ void main() async {
   
   runApp(
     MultiBlocProvider(
-      providers: <BlocProvider>[
+      providers: [
         BlocProvider(create: (_) => sl<UserBloc>())
       ],
       child: const UserDashboardApp(),

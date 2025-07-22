@@ -32,7 +32,7 @@ class Name {
 
   Name(this.title, this.first, this.last);
 
-  factory Name.fromJson(Map<String, String> json) {
+  factory Name.fromJson(Map<String, dynamic> json) {
     return Name(json['title'] ?? '', json['first'] ?? '', json['last'] ?? '');
   }
 
@@ -83,21 +83,21 @@ class Coordinates {
 
   factory Coordinates.fromJson(Map<String, dynamic> json) {
     return Coordinates(
-      json['latitude']?.toDouble() ?? 0.0,
-      json['longitude']?.toDouble() ?? 0.0,
+      double.tryParse(json['latitude']?.toString() ?? '') ?? 0.0,
+      double.tryParse(json['longitude']?.toString() ?? '') ?? 0.0,
     );
   }
 }
 
 class Timezone {
-  final double offset;
+  final String offset;
   final String description;
 
   Timezone(this.offset, this.description);
 
   factory Timezone.fromJson(Map<String, dynamic> json) {
     return Timezone(
-      json['offset']?.toDouble() ?? 0.0,
+      json['offset'] ?? '',
       json['description'] ?? '',
     );
   }
@@ -110,7 +110,10 @@ class Dob {
   Dob(this.date, this.age);
 
   factory Dob.fromJson(Map<String, dynamic> json) {
-    return Dob(json['date'] ?? '', json['age']?.toInt() ?? 0);
+    return Dob(
+      DateTime.tryParse(json['date'] ?? '') ?? DateTime.now(),
+      json['age']?.toInt() ?? 0,
+    );
   }
 }
 
@@ -121,7 +124,10 @@ class Registered {
   Registered(this.date, this.age);
 
   factory Registered.fromJson(Map<String, dynamic> json) {
-    return Registered(json['date'] ?? '', json['age']?.toInt() ?? 0);
+    return Registered(
+      DateTime.tryParse(json['date'] ?? '') ?? DateTime.now(),
+      json['age']?.toInt() ?? 0,
+    );
   }
 }
 

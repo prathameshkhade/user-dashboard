@@ -8,10 +8,4 @@ final lightTheme = ThemeData(
       seedColor: CupertinoColors.systemBlue,
       brightness: Brightness.light,
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    )
 );

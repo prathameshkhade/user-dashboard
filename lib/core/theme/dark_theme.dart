@@ -8,10 +8,4 @@ final darkTheme = ThemeData(
       seedColor: CupertinoColors.systemBlue,
       brightness: Brightness.dark,
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    )
 );

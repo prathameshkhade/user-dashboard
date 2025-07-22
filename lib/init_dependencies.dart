@@ -1,6 +1,5 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-import 'package:userdashboard/core/common/usecase/usecase.dart';
 import 'package:userdashboard/features/users/data/datasource/remote_data_source.dart';
 import 'package:userdashboard/features/users/data/datasource/remote_data_source_impl.dart';
 import 'package:userdashboard/features/users/data/repository/user_repository_impl.dart';

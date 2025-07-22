@@ -15,3 +15,8 @@ class UserErrorState extends UserState {
   final Failure failure;
   UserErrorState(this.failure);
 }
+
+class NavigateToScreenActionState extends UserActionState {
+  final CupertinoPageRoute route;
+  NavigateToScreenActionState(this.route);
+}

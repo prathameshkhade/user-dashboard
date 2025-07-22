@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:userdashboard/core/common/errors/failure.dart';
 import 'package:userdashboard/core/common/usecase/usecase.dart';
 import 'package:userdashboard/features/users/domain/entity/user_entity.dart';
@@ -18,6 +18,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     : _getAllUsersUseCase = getAllUsersUseCase,
       super(UserInitial()) {
     on<RefreshUsersEvent>(_onRefreshUsersEvent);
+    on<NavigateToScreenEvent>(_onNavigateToUserFormEvent);
   }
 
   FutureOr<void> _onRefreshUsersEvent(
@@ -35,5 +36,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     } finally {
       event.completer.complete();
     }
+  }
+
+  FutureOr<void> _onNavigateToUserFormEvent(NavigateToScreenEvent event, Emitter<UserState> emit) {
+    emit(
+      NavigateToScreenActionState(
+        CupertinoPageRoute(
+          builder: (context) => event.destination,
+        ),
+      ),
+    );
   }
 }

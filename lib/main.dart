@@ -8,14 +8,12 @@ import 'package:userdashboard/init_dependencies.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initDependencies();
-  
+
   runApp(
     MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => sl<UserBloc>())
-      ],
+      providers: [BlocProvider(create: (_) => sl<UserBloc>())],
       child: const UserDashboardApp(),
-    )
+    ),
   );
 }
 
@@ -34,15 +32,15 @@ class UserDashboardApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: CupertinoColors.systemBlue,
           brightness: Brightness.light,
-        )
+        ),
       ),
       darkTheme: ThemeData(
-          useMaterial3: true,
+        useMaterial3: true,
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: CupertinoColors.systemBlue,
           brightness: Brightness.dark,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: CupertinoColors.systemBlue,
-            brightness: Brightness.dark,
-          )
+        ),
       ),
       themeMode: ThemeMode.system,
 

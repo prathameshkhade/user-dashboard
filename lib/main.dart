@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:userdashboard/core/theme/dark_theme.dart';
+import 'package:userdashboard/core/theme/light_theme.dart';
 import 'package:userdashboard/features/users/presentation/bloc/user_bloc.dart';
 import 'package:userdashboard/features/users/presentation/screens/dashboard_screen.dart';
 import 'package:userdashboard/init_dependencies.dart';
@@ -25,25 +27,9 @@ class UserDashboardApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'User Dashboard',
-
-      theme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.light,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: CupertinoColors.systemBlue,
-          brightness: Brightness.light,
-        ),
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: CupertinoColors.systemBlue,
-          brightness: Brightness.dark,
-        ),
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       themeMode: ThemeMode.system,
-
       home: const DashboardScreen(),
     );
   }

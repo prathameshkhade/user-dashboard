@@ -1,9 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:userdashboard/features/users/presentation/bloc/user_bloc.dart';
 import 'package:userdashboard/features/users/presentation/screens/dashboard_screen.dart';
+import 'package:userdashboard/init_dependencies.dart';
 
-void main() {
-  runApp(const UserDashboardApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initDependencies();
+  
+  runApp(
+    MultiBlocProvider(
+      providers: <BlocProvider>[
+        BlocProvider(create: (_) => sl<UserBloc>())
+      ],
+      child: const UserDashboardApp(),
+    )
+  );
 }
 
 class UserDashboardApp extends StatelessWidget {

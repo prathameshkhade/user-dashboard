@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
 import 'package:userdashboard/core/common/errors/failure.dart';
 import 'package:userdashboard/core/common/usecase/usecase.dart';
 import 'package:userdashboard/features/users/domain/entity/user_entity.dart';
@@ -15,7 +14,7 @@ part 'user_state.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   final GetAllUsersUseCase _getAllUsersUseCase;
 
-  UserBloc(GetAllUsersUseCase getAllUsersUseCase)
+  UserBloc({required GetAllUsersUseCase getAllUsersUseCase})
     : _getAllUsersUseCase = getAllUsersUseCase,
       super(UserInitial()) {
     on<RefreshUsersEvent>(_onRefreshUsersEvent);

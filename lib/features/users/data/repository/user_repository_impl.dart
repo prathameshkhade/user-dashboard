@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
-import 'package:userdashboard/core/errors/failure.dart';
 import 'package:userdashboard/features/users/data/datasource/remote_data_source.dart';
 import 'package:userdashboard/features/users/domain/entity/user_entity.dart';
 import 'package:userdashboard/features/users/domain/repository/user_repository.dart';
+
+import '../../../../core/common/errors/failure.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final RemoteDataSource remoteDataSource;

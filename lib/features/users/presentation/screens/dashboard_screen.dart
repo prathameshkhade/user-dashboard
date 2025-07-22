@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:userdashboard/features/users/presentation/bloc/user_bloc.dart';
+import 'package:userdashboard/features/users/presentation/widgets/user_tile.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -33,9 +34,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
+        title: const Text('Users'),
         actions: <IconButton>[
-          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.add_circled)),
+          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.add)),
         ],
       ),
 
@@ -58,13 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onRefresh: loadUsers,
               child: ListView.builder(
                 itemCount: state.users.length,
-                itemBuilder: (context, index) => ListTile(
-                  leading: CircleAvatar(
-                    child: Image.network(state.users[index].pictures.thumbnail),
-                  ),
-                  title: Text(state.users[index].name.toString()),
-                  subtitle: Text(state.users[index].email),
-                ),
+                itemBuilder: (context, index) => UserTile(user: state.users[index])
               ),
             );
           }

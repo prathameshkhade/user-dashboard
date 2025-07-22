@@ -38,7 +38,7 @@ class Name {
 
   @override
   String toString() {
-    return '$title $first $last';
+    return '$first $last';
   }
 }
 

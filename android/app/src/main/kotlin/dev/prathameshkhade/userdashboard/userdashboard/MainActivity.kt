@@ -1,4 +1,4 @@
-package dev.prathameshkhade.userdashboard.userdashboard
+package
 
 import io.flutter.embedding.android.FlutterActivity
 

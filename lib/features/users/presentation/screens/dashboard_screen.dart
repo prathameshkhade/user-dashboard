@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:userdashboard/core/common/widgets/error_screen.dart';
 import 'package:userdashboard/features/reports/presentation/bloc/report_bloc.dart';
 import 'package:userdashboard/features/users/domain/entity/user_entity.dart';
 import 'package:userdashboard/features/users/presentation/bloc/user_bloc.dart';
@@ -20,8 +21,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   final searchController = TextEditingController();
   List<UserEntity> users = [];
   List<UserEntity> originalUsers = [];
@@ -36,6 +36,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> loadUsers() {
+    _refreshIndicatorKey.currentState?.show();
     final completer = Completer<void>();
     context.read<UserBloc>().add(RefreshUsersEvent(completer: completer));
     return completer.future;
@@ -51,9 +52,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           IconButton(
             icon: Icon(CupertinoIcons.add),
             onPressed: () {
-              context.read<UserBloc>().add(
-                NavigateToScreenEvent(UserFormScreen()),
-              );
+              context.read<UserBloc>().add(NavigateToScreenEvent(UserFormScreen()));
             },
           ),
         ],
@@ -71,11 +70,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         },
         builder: (context, state) {
           if (state is UserErrorState) {
-            return Center(
-              child: Text(
-                'Error: ${state.failure.error}',
-                style: const TextStyle(color: Colors.red),
-              ),
+            return RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: loadUsers,
+              child: ErrorScreen(failure: state.failure),
             );
           }
           else if (state is UserLoadedState) {
@@ -89,19 +87,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   // Search bar
                   Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: theme.colorScheme.inverseSurface.withValues(
-                        alpha: 0.1,
-                      ),
+                      color: theme.colorScheme.inverseSurface.withValues(alpha: 0.1),
                     ),
                     child: TextFormField(
                       controller: searchController,
@@ -111,19 +101,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         hintText: 'Search Users',
                       ),
                       onChanged: (value) {
-                        context.read<UserBloc>().add(
-                          SearchUsersEvent(query: value),
-                        );
+                        context.read<UserBloc>().add(SearchUsersEvent(query: value));
                       },
                     ),
                   ),
 
                   // Sorting buttons
                   Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 4,
-                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                     child: Row(
                       children: [
                         GestureDetector(
@@ -133,16 +118,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             );
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
                               color: currentSortType == SortType.ascending
                                   ? CupertinoColors.systemBlue
-                                  : theme.colorScheme.inverseSurface.withValues(
-                                      alpha: 0.1,
-                                    ),
+                                  : theme.colorScheme.inverseSurface.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
@@ -165,16 +145,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             );
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
                               color: currentSortType == SortType.descending
                                   ? CupertinoColors.systemBlue
-                                  : theme.colorScheme.inverseSurface.withValues(
-                                      alpha: 0.1,
-                                    ),
+                                  : theme.colorScheme.inverseSurface.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
@@ -221,10 +196,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: theme.primaryColor,
-        icon: Icon(
-          CupertinoIcons.doc_text,
-          color: theme.colorScheme.inverseSurface,
-        ),
+        icon: Icon(CupertinoIcons.doc_text, color: theme.colorScheme.inverseSurface),
         label: Text(
           'Reports',
           style: TextStyle(

@@ -17,29 +17,23 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   SortType _currentSortType = SortType.none;
 
   UserBloc({required GetAllUsersUseCase getAllUsersUseCase})
-      : _getAllUsersUseCase = getAllUsersUseCase,
-        super(UserInitial()) {
+    : _getAllUsersUseCase = getAllUsersUseCase,
+      super(UserInitial()) {
     on<RefreshUsersEvent>(_onRefreshUsersEvent);
     on<SearchUsersEvent>(_onSearchUsersEvent);
     on<NavigateToScreenEvent>(_onNavigateToUserFormEvent);
     on<SortUsersEvent>(_onSortUsersEvent);
   }
 
-  FutureOr<void> _onRefreshUsersEvent(
-      RefreshUsersEvent event,
-      Emitter<UserState> emit,
-      ) async {
+  FutureOr<void> _onRefreshUsersEvent(RefreshUsersEvent event, Emitter<UserState> emit) async {
     try {
       final res = await _getAllUsersUseCase(NoParams());
-      res.fold(
-            (failure) => emit(UserErrorState(failure)),
-            (users) {
-          _originalUsers = users;
-          _currentSearchQuery = '';
-          _currentSortType = SortType.none;
-          emit(UserLoadedState(users, _originalUsers, _currentSortType));
-        },
-      );
+      res.fold((failure) => emit(UserErrorState(failure)), (users) {
+        _originalUsers = users;
+        _currentSearchQuery = '';
+        _currentSortType = SortType.none;
+        emit(UserLoadedState(users, _originalUsers, _currentSortType));
+      });
     } catch (e) {
       emit(UserErrorState(Failure(error: e.toString())));
     } finally {
@@ -47,21 +41,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  FutureOr<void> _onNavigateToUserFormEvent(
-      NavigateToScreenEvent event,
-      Emitter<UserState> emit,
-      ) {
-    emit(
-      NavigateToScreenActionState(
-        CupertinoPageRoute(builder: (context) => event.destination),
-      ),
-    );
+  FutureOr<void> _onNavigateToUserFormEvent(NavigateToScreenEvent event, Emitter<UserState> emit) {
+    emit(NavigateToScreenActionState(CupertinoPageRoute(builder: (context) => event.destination)));
   }
 
-  FutureOr<void> _onSearchUsersEvent(
-      SearchUsersEvent event,
-      Emitter<UserState> emit,
-      ) {
+  FutureOr<void> _onSearchUsersEvent(SearchUsersEvent event, Emitter<UserState> emit) {
     _currentSearchQuery = event.query.toLowerCase();
     debugPrint('Search query: $_currentSearchQuery');
 
@@ -69,9 +53,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (_currentSearchQuery.isEmpty) {
       filteredUsers = List.from(_originalUsers);
     } else {
-      filteredUsers = _originalUsers.where(
-            (user) => user.name.toString().toLowerCase().contains(_currentSearchQuery),
-      ).toList();
+      filteredUsers = _originalUsers
+          .where((user) => user.name.toString().toLowerCase().contains(_currentSearchQuery))
+          .toList();
     }
 
     // Apply current sorting
@@ -80,10 +64,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     emit(UserLoadedState(filteredUsers, _originalUsers, _currentSortType));
   }
 
-  FutureOr<void> _onSortUsersEvent(
-      SortUsersEvent event,
-      Emitter<UserState> emit,
-      ) {
+  FutureOr<void> _onSortUsersEvent(SortUsersEvent event, Emitter<UserState> emit) {
     // Toggle sort: if same sort type is clicked, remove sorting
     if (_currentSortType == event.sortType) {
       _currentSortType = SortType.none;
@@ -96,9 +77,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (_currentSearchQuery.isEmpty) {
       usersToSort = List.from(_originalUsers);
     } else {
-      usersToSort = _originalUsers.where(
-            (user) => user.name.toString().toLowerCase().contains(_currentSearchQuery),
-      ).toList();
+      usersToSort = _originalUsers
+          .where((user) => user.name.toString().toLowerCase().contains(_currentSearchQuery))
+          .toList();
     }
 
     _applySorting(usersToSort);

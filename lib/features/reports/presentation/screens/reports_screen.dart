@@ -56,11 +56,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
               child: RefreshIndicator(
                 key: _refreshIndicatorKey,
                 onRefresh: loadReports,
-                child: Text(state.failure.error, textAlign: TextAlign.center)
+                child: Text(state.failure.error, textAlign: TextAlign.center),
               ),
             );
-          }
-          else if (state is ReportsLoaded) {
+          } else if (state is ReportsLoaded) {
             final reports = state.reports;
             return RefreshIndicator(
               key: _refreshIndicatorKey,
@@ -75,9 +74,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
           // Default view
           return RefreshIndicator(
-              key: _refreshIndicatorKey,
-              onRefresh: loadReports,
-              child: const SizedBox.shrink()
+            key: _refreshIndicatorKey,
+            onRefresh: loadReports,
+            child: const SizedBox.shrink(),
           );
         },
       ),
@@ -96,9 +95,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
         onPressed: () {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-                SnackBar(content: const Text('Not Implemented yet'))
-            );
+            ..showSnackBar(SnackBar(content: const Text('Not Implemented yet')));
         },
       ),
     );

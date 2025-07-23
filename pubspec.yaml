@@ -2,7 +2,7 @@ name: userdashboard
 description: "User Dashboard Application - Flutter App Assignment"
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.1+10010
 
 environment:
   sdk: ^3.8.1
@@ -18,6 +18,7 @@ dependencies:
   http: ^1.4.0
   get_it: ^8.0.3
   intl: ^0.20.2
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -30,6 +31,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/lottie/
 
   # fonts:
   #   - family: Schyler

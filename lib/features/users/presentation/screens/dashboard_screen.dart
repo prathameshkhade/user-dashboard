@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:userdashboard/features/reports/presentation/bloc/report_bloc.dart';
 import 'package:userdashboard/features/users/presentation/bloc/user_bloc.dart';
 import 'package:userdashboard/features/users/presentation/screens/user_form_screen.dart';
 import 'package:userdashboard/features/users/presentation/screens/user_profile.dart';
 import 'package:userdashboard/features/users/presentation/widgets/user_tile.dart';
+
+import '../../../reports/presentation/screens/reports_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -34,6 +37,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Users'),
@@ -55,6 +59,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         listener: (context, state) {
           if (state is NavigateToScreenActionState) {
             Navigator.push(context, state.route);
+          }
+          else if (state is ReportNavigateToActionState) {
+            Navigator.push(context, ReportsScreen.route());
           }
         },
         builder: (context, state) {
@@ -89,6 +96,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: const Center(child: Text('Loading...')),
           );
         },
+      ),
+
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: theme.primaryColor,
+        icon: Icon(CupertinoIcons.doc_text, color: theme.colorScheme.inverseSurface),
+        label: Text('Reports', style: TextStyle(
+          color: theme.colorScheme.inverseSurface,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        )),
+        onPressed: () => Navigator.push(context, ReportsScreen.route())
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:userdashboard/core/theme/dark_theme.dart';
 import 'package:userdashboard/core/theme/light_theme.dart';
+import 'package:userdashboard/features/reports/presentation/bloc/report_bloc.dart';
 import 'package:userdashboard/features/users/presentation/bloc/user_bloc.dart';
 import 'package:userdashboard/features/users/presentation/screens/dashboard_screen.dart';
 import 'package:userdashboard/init_dependencies.dart';
@@ -12,7 +13,10 @@ void main() async {
 
   runApp(
     MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => sl<UserBloc>())],
+      providers: [
+        BlocProvider(create: (_) => sl<UserBloc>()),
+        BlocProvider(create: (_) => sl<ReportBloc>()),
+      ],
       child: const UserDashboardApp(),
     ),
   );

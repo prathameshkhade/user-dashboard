@@ -62,6 +62,11 @@ class Location {
     this.timezone,
   );
 
+  @override
+  String toString() {
+    return '$street, $city, $state, $country, $postcode';
+  }
+
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
       json['street']?['number']?.toString() ?? '',

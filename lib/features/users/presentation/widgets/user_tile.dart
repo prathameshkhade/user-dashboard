@@ -12,7 +12,7 @@ class UserTile extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: ListTile(
         horizontalTitleGap: 8,
         contentPadding: EdgeInsets.zero,

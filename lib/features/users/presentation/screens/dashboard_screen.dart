@@ -7,7 +7,7 @@ import 'package:userdashboard/features/reports/presentation/bloc/report_bloc.dar
 import 'package:userdashboard/features/users/domain/entity/user_entity.dart';
 import 'package:userdashboard/features/users/presentation/bloc/user_bloc.dart';
 import 'package:userdashboard/features/users/presentation/screens/user_form_screen.dart';
-import 'package:userdashboard/features/users/presentation/screens/user_profile.dart';
+import 'package:userdashboard/features/users/presentation/screens/user_profile_screen.dart';
 import 'package:userdashboard/features/users/presentation/widgets/user_tile.dart';
 
 import '../../../reports/presentation/screens/reports_screen.dart';

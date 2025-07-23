@@ -3,8 +3,9 @@ import 'package:userdashboard/features/users/domain/entity/user_entity.dart';
 
 class UserTile extends StatelessWidget {
   final UserEntity user;
+  final GestureTapCallback onTap;
 
-  const UserTile({super.key, required this.user});
+  const UserTile({super.key, required this.user, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,7 @@ class UserTile extends StatelessWidget {
       ),
       title: Text(user.name.toString()),
       subtitle: Text(user.email),
+      onTap: onTap,
     );
   }
 }

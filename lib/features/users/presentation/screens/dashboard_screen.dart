@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:userdashboard/features/users/presentation/bloc/user_bloc.dart';
 import 'package:userdashboard/features/users/presentation/screens/user_form_screen.dart';
+import 'package:userdashboard/features/users/presentation/screens/user_profile.dart';
 import 'package:userdashboard/features/users/presentation/widgets/user_tile.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -70,8 +71,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               onRefresh: loadUsers,
               child: ListView.builder(
                 itemCount: state.users.length,
-                itemBuilder: (context, index) =>
-                    UserTile(user: state.users[index]),
+                itemBuilder: (context, index) => UserTile(
+                  user: state.users[index],
+                  onTap: () {
+                    context.read<UserBloc>().add(
+                      NavigateToScreenEvent(UserProfile(user: state.users[index])
+                    ));
+                  }
+                ),
               ),
             );
           }

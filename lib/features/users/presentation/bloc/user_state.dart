@@ -8,7 +8,8 @@ final class UserInitial extends UserState {}
 
 class UserLoadedState extends UserState {
   final List<UserEntity> users;
-  UserLoadedState(this.users);
+  final List<UserEntity> originalUsers;
+  UserLoadedState(this.users, this.originalUsers);
 }
 
 class UserErrorState extends UserState {

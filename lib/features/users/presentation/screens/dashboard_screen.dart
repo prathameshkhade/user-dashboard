@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:userdashboard/features/reports/presentation/bloc/report_bloc.dart';
+import 'package:userdashboard/features/users/domain/entity/user_entity.dart';
 import 'package:userdashboard/features/users/presentation/bloc/user_bloc.dart';
 import 'package:userdashboard/features/users/presentation/screens/user_form_screen.dart';
 import 'package:userdashboard/features/users/presentation/screens/user_profile.dart';
@@ -19,7 +20,11 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  GlobalKey<RefreshIndicatorState>();
+  final searchController = TextEditingController();
+  List<UserEntity> users = [];
+  List<UserEntity> originalUsers = [];
 
   @override
   void initState() {
@@ -72,42 +77,154 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 style: const TextStyle(color: Colors.red),
               ),
             );
-          }
-          else if (state is UserLoadedState) {
+          } else if (state is UserLoadedState) {
+            users = state.users;
+            originalUsers = state.originalUsers;
             return RefreshIndicator(
               key: _refreshIndicatorKey,
               onRefresh: loadUsers,
-              child: ListView.builder(
-                itemCount: state.users.length,
-                itemBuilder: (context, index) => UserTile(
-                  user: state.users[index],
-                  onTap: () {
-                    context.read<UserBloc>().add(
-                      NavigateToScreenEvent(UserProfile(user: state.users[index])
-                    ));
-                  }
-                ),
+              child: ListView(
+                children: [
+                  // Search bar
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: theme.colorScheme.inverseSurface.withValues(
+                        alpha: 0.1,
+                      ),
+                    ),
+                    child: TextFormField(
+                      controller: searchController,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        icon: Icon(Icons.search),
+                        hintText: 'Search Users',
+                      ),
+                      onChanged: (value) {
+                        context.read<UserBloc>().add(
+                          SearchUsersEvent(query: value),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // Sorting buttons
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            context.read<UserBloc>().add(
+                              SortUsersEvent(ascending: true),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.surface,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: theme.colorScheme.outline.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            child: Text(
+                              'Sort A-Z',
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurface,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        GestureDetector(
+                          onTap: () {
+                            context.read<UserBloc>().add(
+                              SortUsersEvent(ascending: false),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.surface,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: theme.colorScheme.outline.withValues(alpha: 0.3),
+                              ),
+                            ),
+                            child: Text(
+                              'Sort Z-A',
+                              style: TextStyle(
+                                color: theme.colorScheme.onSurface,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // List of Users
+                  ...users.map(
+                        (user) => UserTile(
+                      user: user,
+                      onTap: () {
+                        context.read<UserBloc>().add(
+                          NavigateToScreenEvent(
+                            UserProfile(user: user),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             );
           }
-
           return RefreshIndicator(
             key: _refreshIndicatorKey,
             onRefresh: loadUsers,
-            child: const SizedBox.shrink()
+            child: ListView(
+              // Use ListView to allow RefreshIndicator to work even when child is empty
+              children: const [SizedBox.shrink()],
+            ),
           );
         },
       ),
 
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: theme.primaryColor,
-        icon: Icon(CupertinoIcons.doc_text, color: theme.colorScheme.inverseSurface),
-        label: Text('Reports', style: TextStyle(
+        icon: Icon(
+          CupertinoIcons.doc_text,
           color: theme.colorScheme.inverseSurface,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        )),
-        onPressed: () => Navigator.push(context, ReportsScreen.route())
+        ),
+        label: Text(
+          'Reports',
+          style: TextStyle(
+            color: theme.colorScheme.inverseSurface,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        onPressed: () => Navigator.push(context, ReportsScreen.route()),
       ),
     );
   }

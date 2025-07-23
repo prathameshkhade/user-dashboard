@@ -21,10 +21,11 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-  GlobalKey<RefreshIndicatorState>();
+      GlobalKey<RefreshIndicatorState>();
   final searchController = TextEditingController();
   List<UserEntity> users = [];
   List<UserEntity> originalUsers = [];
+  SortType currentSortType = SortType.none;
 
   @override
   void initState() {
@@ -64,8 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         listener: (context, state) {
           if (state is NavigateToScreenActionState) {
             Navigator.push(context, state.route);
-          }
-          else if (state is ReportNavigateToActionState) {
+          } else if (state is ReportNavigateToActionState) {
             Navigator.push(context, ReportsScreen.route());
           }
         },
@@ -77,9 +77,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 style: const TextStyle(color: Colors.red),
               ),
             );
-          } else if (state is UserLoadedState) {
+          }
+          else if (state is UserLoadedState) {
             users = state.users;
             originalUsers = state.originalUsers;
+            currentSortType = state.currentSortType;
             return RefreshIndicator(
               key: _refreshIndicatorKey,
               onRefresh: loadUsers,
@@ -118,13 +120,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                   // Sorting buttons
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 4,
+                    ),
                     child: Row(
                       children: [
                         GestureDetector(
                           onTap: () {
                             context.read<UserBloc>().add(
-                              SortUsersEvent(ascending: true),
+                              SortUsersEvent(sortType: SortType.ascending),
                             );
                           },
                           child: Container(
@@ -133,16 +138,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               vertical: 8,
                             ),
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.surface,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: theme.colorScheme.outline.withValues(alpha: 0.3),
-                              ),
+                              color: currentSortType == SortType.ascending
+                                  ? CupertinoColors.systemBlue
+                                  : theme.colorScheme.inverseSurface.withValues(
+                                      alpha: 0.1,
+                                    ),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
                               'Sort A-Z',
                               style: TextStyle(
-                                color: theme.colorScheme.onSurface,
+                                color: currentSortType == SortType.ascending
+                                    ? Colors.white
+                                    : theme.colorScheme.onSurface,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -153,7 +161,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         GestureDetector(
                           onTap: () {
                             context.read<UserBloc>().add(
-                              SortUsersEvent(ascending: false),
+                              SortUsersEvent(sortType: SortType.descending),
                             );
                           },
                           child: Container(
@@ -162,16 +170,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               vertical: 8,
                             ),
                             decoration: BoxDecoration(
-                              color: theme.colorScheme.surface,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(
-                                color: theme.colorScheme.outline.withValues(alpha: 0.3),
-                              ),
+                              color: currentSortType == SortType.descending
+                                  ? CupertinoColors.systemBlue
+                                  : theme.colorScheme.inverseSurface.withValues(
+                                      alpha: 0.1,
+                                    ),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
                               'Sort Z-A',
                               style: TextStyle(
-                                color: theme.colorScheme.onSurface,
+                                color: currentSortType == SortType.descending
+                                    ? Colors.white
+                                    : theme.colorScheme.onSurface,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -184,13 +195,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                   // List of Users
                   ...users.map(
-                        (user) => UserTile(
+                    (user) => UserTile(
                       user: user,
                       onTap: () {
                         context.read<UserBloc>().add(
-                          NavigateToScreenEvent(
-                            UserProfile(user: user),
-                          ),
+                          NavigateToScreenEvent(UserProfile(user: user)),
                         );
                       },
                     ),

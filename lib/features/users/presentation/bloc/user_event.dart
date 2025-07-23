@@ -19,7 +19,6 @@ class SearchUsersEvent extends UserEvent {
 }
 
 class SortUsersEvent extends UserEvent {
-  // true for A-Z, false for Z-A
-  final bool ascending;
-  SortUsersEvent({required this.ascending});
+  final SortType sortType;
+  SortUsersEvent({required this.sortType});
 }

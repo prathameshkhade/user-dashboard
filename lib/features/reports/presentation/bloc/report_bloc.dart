@@ -23,7 +23,7 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
   }
 
   FutureOr<void> _onNavigateToCreateReportsEvent(
-    NavigateToReportsEvent event,
+    NavigateToReportsEvent _,
     Emitter<ReportState> emit,
   ) {
     emit(ReportNavigateToActionState());
@@ -33,11 +33,16 @@ class ReportBloc extends Bloc<ReportEvent, ReportState> {
     FetchReportsEvent event,
     Emitter<ReportState> emit,
   ) async {
-    await Future.delayed(const Duration(seconds: 2));
-    final res = await _getAllReportsUseCase(NoParams());
-    res.fold(
-      (failure) => emit(ReportsLoadingError(failure)),
-      (reportsList) => emit(ReportsLoaded(reportsList)),
-    );
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+      final res = await _getAllReportsUseCase(NoParams());
+      res.fold(
+        (failure) => emit(ReportsLoadingError(failure)),
+        (reportsList) => emit(ReportsLoaded(reportsList)),
+      );
+    }
+    finally {
+      event.completer.complete();
+    }
   }
 }

@@ -33,7 +33,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       );
     } catch (e) {
       emit(UserErrorState(Failure(error: e.toString())));
-    } finally {
+    }
+    finally {
       event.completer.complete();
     }
   }

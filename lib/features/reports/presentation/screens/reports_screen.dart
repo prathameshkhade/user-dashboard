@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,11 +17,20 @@ class ReportsScreen extends StatefulWidget {
 }
 
 class _ReportsScreenState extends State<ReportsScreen> {
+  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
-    context.read<ReportBloc>().add(FetchReportsEvent());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _refreshIndicatorKey.currentState?.show();
+    });
+  }
+
+  Future<void> loadReports() async {
+    final completer = Completer<void>();
+    context.read<ReportBloc>().add(FetchReportsEvent(completer));
+    return completer.future;
   }
 
   @override
@@ -28,8 +39,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        titleTextStyle: theme.textTheme.headlineSmall,
+        // centerTitle: true,
+        // titleTextStyle: theme.textTheme.headlineSmall,
         title: const Text('Reports'),
       ),
 
@@ -42,22 +53,32 @@ class _ReportsScreenState extends State<ReportsScreen> {
         builder: (context, state) {
           if (state is ReportsLoadingError) {
             return Center(
-              child: Text(state.failure.error),
+              child: RefreshIndicator(
+                key: _refreshIndicatorKey,
+                onRefresh: loadReports,
+                child: Text(state.failure.error, textAlign: TextAlign.center)
+              ),
             );
           }
           else if (state is ReportsLoaded) {
             final reports = state.reports;
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
-              child: ListView.builder(
+            return RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: loadReports,
+              child: ListView.separated(
                 itemCount: reports.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 10),
                 itemBuilder: (context, index) => ReportsTile(report: reports[index]),
               ),
             );
           }
 
           // Default view
-          return const CircularProgressIndicator();
+          return RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: loadReports,
+              child: const SizedBox.shrink()
+          );
         },
       ),
 

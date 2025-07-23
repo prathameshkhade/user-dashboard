@@ -19,7 +19,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  Future<void> loadUsers() async {
+  Future<void> loadUsers() {
     final completer = Completer<void>();
     context.read<UserBloc>().add(RefreshUsersEvent(completer: completer));
     return completer.future;
@@ -72,7 +72,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 style: const TextStyle(color: Colors.red),
               ),
             );
-          } else if (state is UserLoadedState) {
+          }
+          else if (state is UserLoadedState) {
             return RefreshIndicator(
               key: _refreshIndicatorKey,
               onRefresh: loadUsers,
@@ -93,7 +94,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           return RefreshIndicator(
             key: _refreshIndicatorKey,
             onRefresh: loadUsers,
-            child: const Center(child: Text('Loading...')),
+            child: const SizedBox.shrink()
           );
         },
       ),

@@ -17,7 +17,7 @@ val keystoreProperties = Properties().apply {
 }
 
 android {
-    namespace = "dev.prathameshkhade.userdashboard.userdashboard"
+    namespace = "dev.prathameshkhade.userdashboard"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -36,7 +36,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "dev.prathameshkhade.userdashboard.userdashboard"
+        applicationId = "dev.prathameshkhade.userdashboard"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
